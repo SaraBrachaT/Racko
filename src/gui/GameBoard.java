@@ -2,9 +2,12 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -35,7 +38,7 @@ public class GameBoard extends JFrame
 		setBounds(0, 0 , screenSize.width, screenSize.height);
 		mainFrame = new JPanel();
 		
-		mainFrame.setLayout(new BorderLayout());
+		mainFrame.setLayout(null);
 		//setBackground(Color.___ or Theme.___- make a theme so user can have options)
 		setContentPane(mainFrame);
 		user1Cards = new JButton[10];
@@ -45,23 +48,25 @@ public class GameBoard extends JFrame
 		
 		
 		setUpBoards();
+		mainFrame.setVisible(true);
 	}
 	
 	private void setUpBoards()
 	{
 		ImageIcon background = createImageIcon("/cardFront.png");
-		
-		   JPanel subPanel = new JPanel();
-		    
+			
 		for(int card = 0; card < user1Cards.length; card++)
 		{
 			user1Cards[card] = new JButton(background);
-			//user1Cards[card].setIcon(createImageIcon("/RackoCardBack.PNG"));
-			user1Cards[card].setPreferredSize(new Dimension(90, 70));
-			//user1Cards[card].setBounds((10+30*card), 300, 20, 18);
-			subPanel.add(user1Cards[card], BorderLayout.PAGE_END);
+			//user1Cards[card].setText(deck.drawCard());
+			user1Cards[card].setHorizontalTextPosition(JButton.CENTER);
+			user1Cards[card].setVerticalTextPosition(JButton.CENTER);
+			user1Cards[card].setSize(90, 70);
+			user1Cards[card].setLocation(175 + (card*100), 600);
+			mainFrame.add(user1Cards[card]);
+
 		}
-		mainFrame.add(subPanel, BorderLayout.PAGE_END);
+	
 
 	}
 	
