@@ -1,4 +1,4 @@
-package racko;
+package logic;
 
 public class Game {
 

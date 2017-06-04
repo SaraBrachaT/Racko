@@ -1,4 +1,4 @@
-package racko;
+package logic;
 
 public class PileEmptyException extends Exception {
 

@@ -1,25 +1,17 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JTabbedPane;
 
 public class GameBoard extends JFrame
 {
@@ -29,7 +21,9 @@ public class GameBoard extends JFrame
 	private JButton drawPile;
 	private JButton discardPile;
 	private JButton[] user1Cards;
+	private JTabbedPane user1CardPane;
 	private JLabel computerBoard;
+	private JButton btnNewButton;
 
 
 	public GameBoard()
@@ -49,8 +43,11 @@ public class GameBoard extends JFrame
 		gameTitle.setSize(1000,100);
 		gameTitle.setFont(new Font("Britannic Bold", Font.PLAIN, 56));
 		mainFrame.add(gameTitle);
-		user1Cards = new JButton[10];
 		
+		user1Cards = new JButton[10];
+		user1CardPane = new JTabbedPane(JTabbedPane.RIGHT);
+		user1CardPane.setBounds(337, 22, 300, 200);
+		mainFrame.add(user1CardPane);
 		
 		
 		
@@ -63,8 +60,11 @@ public class GameBoard extends JFrame
 	private void setUpBoards()
 	{
 		ImageIcon background = createImageIcon("/partialCardFront.PNG");
+		ImageIcon background2 = createImageIcon("/cardFront.png");
+		
+		Random tempGen = new Random(System.currentTimeMillis());
 			
-		for(int card = user1Cards.length-1; card > 0 ; card--)
+		for(int card = 0; card < user1Cards.length-1; card++)
 		{
 			user1Cards[card] = new JButton(background);
 			user1Cards[card].setBorder(null);
@@ -72,12 +72,23 @@ public class GameBoard extends JFrame
 
 			user1Cards[card].setHorizontalTextPosition(JButton.CENTER);
 			user1Cards[card].setVerticalTextPosition(JButton.CENTER);
-			user1Cards[card].setSize(170, 130);
-			user1Cards[card].setLocation(40, 20 + (card*55));
+			user1Cards[card].setSize(170, 50);
+			user1Cards[card].setLocation(40, 20 + (card*50));
 			mainFrame.add(user1Cards[card]);
 			//setComponentZOrder(user1Cards[card], card);
+/*			
+			user1Cards[card] = new JButton(background2);
+			user1CardPane.addTab("Card " + card, null, user1Cards[card], null);
+			user1Cards[card].setText(((Integer)tempGen.nextInt(60)).toString());
+			user1Cards[card].setText("Hello World");*/
 		}
-	
+		user1Cards[9] = new JButton(background2);
+		user1Cards[9].setSize(170, 115);
+		user1Cards[9].setLocation(40, 20 + (9*50));
+		mainFrame.add(user1Cards[9]);
+		
+		
+		
 		computerBoard = new JLabel(createImageIcon("/ComputerBoard.png"));
 		computerBoard.setSize(700, 500);
 		computerBoard.setLocation(800, 150);
@@ -95,6 +106,9 @@ private void setUpPiles()
 	drawPile.setLocation(575, 350);
 	drawPile.setSize(220,170);
 	mainFrame.add(drawPile);
+	
+	
+
 }
 
 

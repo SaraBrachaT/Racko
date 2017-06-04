@@ -1,4 +1,4 @@
-package racko;
+package logic;
 
 /*This class will probably not be used.
 	It is just here as a reminder in case 
