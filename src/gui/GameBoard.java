@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import logic.Game;
+
 public class GameBoard extends JFrame
 {
 
@@ -21,13 +23,14 @@ public class GameBoard extends JFrame
 	private JButton drawPile;
 	private JButton discardPile;
 	private JButton[] user1Cards;
-	private JTabbedPane user1CardPane;
 	private JLabel computerBoard;
 	private JButton btnNewButton;
-
+	private Game racko;
 
 	public GameBoard()
 	{
+		racko = new Game("Computer", "User");
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(0, 0 , screenSize.width, screenSize.height);
@@ -45,9 +48,6 @@ public class GameBoard extends JFrame
 		mainFrame.add(gameTitle);
 		
 		user1Cards = new JButton[10];
-		user1CardPane = new JTabbedPane(JTabbedPane.RIGHT);
-		user1CardPane.setBounds(337, 22, 300, 200);
-		mainFrame.add(user1CardPane);
 		
 		
 		
@@ -62,38 +62,38 @@ public class GameBoard extends JFrame
 		ImageIcon background = createImageIcon("/partialCardFront.PNG");
 		ImageIcon background2 = createImageIcon("/cardFront.png");
 		
-		Random tempGen = new Random(System.currentTimeMillis());
+		
 			
 		for(int card = 0; card < user1Cards.length-1; card++)
 		{
 			user1Cards[card] = new JButton(background);
-			user1Cards[card].setBorder(null);
-			//user1Cards[card].setText(deck.drawCard());
-
-			user1Cards[card].setHorizontalTextPosition(JButton.CENTER);
-			user1Cards[card].setVerticalTextPosition(JButton.CENTER);
-			user1Cards[card].setSize(170, 50);
-			user1Cards[card].setLocation(40, 20 + (card*50));
-			mainFrame.add(user1Cards[card]);
-			//setComponentZOrder(user1Cards[card], card);
-/*			
-			user1Cards[card] = new JButton(background2);
-			user1CardPane.addTab("Card " + card, null, user1Cards[card], null);
-			user1Cards[card].setText(((Integer)tempGen.nextInt(60)).toString());
-			user1Cards[card].setText("Hello World");*/
+			generateCard(card);
 		}
 		user1Cards[9] = new JButton(background2);
+		generateCard(9);
 		user1Cards[9].setSize(170, 115);
-		user1Cards[9].setLocation(40, 20 + (9*50));
-		mainFrame.add(user1Cards[9]);
-		
-		
+				
 		
 		computerBoard = new JLabel(createImageIcon("/ComputerBoard.png"));
 		computerBoard.setSize(700, 500);
 		computerBoard.setLocation(800, 150);
 		mainFrame.add(computerBoard);
 
+	}
+	
+	private void generateCard(int cardNum)
+	{
+		Random tempGen = new Random(System.currentTimeMillis());
+		
+		user1Cards[cardNum].setBorder(null);
+		user1Cards[cardNum].setHorizontalTextPosition(JButton.CENTER);
+		user1Cards[cardNum].setVerticalTextPosition(JButton.CENTER);
+		user1Cards[cardNum].setSize(170, 50);
+		user1Cards[cardNum].setLocation(40, 20 + (cardNum*50));
+		mainFrame.add(user1Cards[cardNum]);
+
+		//user1Cards[card].setText(racko.drawPile.pickDrawPile());
+		user1Cards[cardNum].setText(((Integer)tempGen.nextInt(60)).toString());	
 	}
 	
 private void setUpPiles()

@@ -12,6 +12,8 @@ public class Game {
 	
 	//the gui passes in the names of the two players
 	//and instantiates the game
+	
+	//Perhaps make a no args constructor that instantiates the 2 players to computer and user -- SB 
 	public Game(String player1, String player2)
 	{
 		drawPile = new Deck();
@@ -22,8 +24,8 @@ public class Game {
 		
 		currentCard = 0;//nothing yet, there is no card 0
 		
-		player1 = true;
-		player2 = false;
+	//	player1 = true;
+	//	player2 = false;
 	}
 
 }
