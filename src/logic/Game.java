@@ -28,4 +28,10 @@ public class Game {
 	//	player2 = false;
 	}
 
+	//I created a getter so I can use the deck methods. I don't know if this is what you were planning on doing, so please feel free to
+	//delete or edit it --SB
+	public Deck getDrawPile()
+	{
+		return drawPile;
+	}
 }

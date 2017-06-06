@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -11,9 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
 import logic.Game;
+import logic.PileEmptyException;
 
 public class GameBoard extends JFrame
 {
@@ -25,14 +26,22 @@ public class GameBoard extends JFrame
 	private JButton[] user1Cards;
 	private JLabel computerBoard;
 	private JButton btnNewButton;
+	private JLabel currentCard;
+	private JLabel instruction;
+	private ImageIcon partialFrontBkgrnd;
+	private ImageIcon frontBkgrnd;
+	private ImageIcon backBkgrnd;
+	private Dimension screenSize;
+	
+	
 	private Game racko;
-
-	public GameBoard()
+		
+	public GameBoard() throws PileEmptyException
 	{
 		racko = new Game("Computer", "User");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(0, 0 , screenSize.width, screenSize.height);
 		mainFrame = new JPanel();
 		
@@ -49,27 +58,26 @@ public class GameBoard extends JFrame
 		
 		user1Cards = new JButton[10];
 		
+		partialFrontBkgrnd = createImageIcon("/partialCardFront.PNG");
+		frontBkgrnd = createImageIcon("/cardFront.png");
+		backBkgrnd = createImageIcon("/RackoCardBack.PNG");
 		
 		
 		
 		setUpBoards();
 		setUpPiles();
+		setUpCurrentCard();
 		mainFrame.setVisible(true);
 	}
 	
-	private void setUpBoards()
+	private void setUpBoards() throws PileEmptyException
 	{
-		ImageIcon background = createImageIcon("/partialCardFront.PNG");
-		ImageIcon background2 = createImageIcon("/cardFront.png");
-		
-		
-			
 		for(int card = 0; card < user1Cards.length-1; card++)
 		{
-			user1Cards[card] = new JButton(background);
+			user1Cards[card] = new JButton(partialFrontBkgrnd);
 			generateCard(card);
 		}
-		user1Cards[9] = new JButton(background2);
+		user1Cards[9] = new JButton(frontBkgrnd);
 		generateCard(9);
 		user1Cards[9].setSize(170, 115);
 				
@@ -81,7 +89,7 @@ public class GameBoard extends JFrame
 
 	}
 	
-	private void generateCard(int cardNum)
+	private void generateCard(int cardNum) throws PileEmptyException
 	{
 		Random tempGen = new Random(System.currentTimeMillis());
 		
@@ -92,13 +100,13 @@ public class GameBoard extends JFrame
 		user1Cards[cardNum].setLocation(40, 20 + (cardNum*50));
 		mainFrame.add(user1Cards[cardNum]);
 
-		//user1Cards[card].setText(racko.drawPile.pickDrawPile());
-		user1Cards[cardNum].setText(((Integer)tempGen.nextInt(60)).toString());	
+		user1Cards[cardNum].setText(((Integer)racko.getDrawPile().pickDrawPile()).toString());
+		//user1Cards[cardNum].setText(((Integer)tempGen.nextInt(60)).toString());	
 	}
 	
 private void setUpPiles()
 {
-	drawPile = new JButton(createImageIcon("/RackoCardBack.PNG"));
+	drawPile = new JButton(backBkgrnd);
 	drawPile.setText("Draw Card");
 	drawPile.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 	drawPile.setHorizontalTextPosition(JButton.CENTER);
@@ -107,10 +115,59 @@ private void setUpPiles()
 	drawPile.setSize(220,170);
 	mainFrame.add(drawPile);
 	
+	discardPile = new JButton(frontBkgrnd);
+	discardPile.setLocation(470, 350);
+	discardPile.setSize(220, 170);
+	discardPile.setVisible(false);
+	mainFrame.add(discardPile);
+	
+	
+	
+	drawPile.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+	    	if(!currentCard.isVisible())
+	    	{
+	    		try
+	    		{
+	    			setCurrentCardValue(racko.getDrawPile().pickDrawPile().toString());
+	    		}
+	    		catch (PileEmptyException e1)
+	    		{
+	    			//show empty pile...shouldn't really happen cuz should keep reshuffling
+	    		}
+	    	}
+	    	if(!discardPile.isVisible())
+	    	{
+	    		discardPile.setVisible(true);
+	    	}
+	    }
+	});
 	
 
 }
 
+private void setUpCurrentCard()
+{
+	instruction = new JLabel("Fix Wording: Click a card on your board to place this card there. If you would not"
+			+ " like to use this card, click the discard pile");
+			
+	currentCard = new JLabel(frontBkgrnd);
+	currentCard.setSize(700,500);
+	System.out.println(screenSize.getWidth());
+	System.out.println(screenSize.width);
+	currentCard.setLocation(300, 10);
+	currentCard.setHorizontalTextPosition(JButton.CENTER);
+	currentCard.setVerticalTextPosition(JButton.CENTER);
+	currentCard.setVisible(false);
+	mainFrame.add(currentCard);
+	mainFrame.repaint();
+}
+
+private void setCurrentCardValue(String cardNum)
+{
+	currentCard.setText(cardNum.toString());
+	currentCard.setVisible(true);	
+}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private ImageIcon createImageIcon(String path) {
@@ -125,13 +182,12 @@ private void setUpPiles()
 
 	/**
 	 * Launch the application.
+	 * @throws PileEmptyException 
 	 */
-	public static void main(String[] args)
+	public static void main(String[] args) throws PileEmptyException
 	{
 		GameBoard frame = new GameBoard();
 		frame.setVisible(true);
-		
-		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
 	}
+	
 }

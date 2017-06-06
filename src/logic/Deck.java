@@ -24,9 +24,9 @@ public class Deck {
 	 * take top card from the drawing pile
 	 */
 	
-	public Integer pickDrawPile() throws PileEmptyException 
+	public Integer pickDrawPile() throws PileEmptyException  //shouldn't really happen cuz should keep reshuffling.... Also, he doesn't like code that's on one line without{} like this, so we should probably change that --SB
 	{
-		if(!drawPile.isEmpty()) return drawPile.pop();
+		if(!drawPile.isEmpty()) return drawPile.pop();   //it would be easier for me if it's returned as a string
 		
 		else throw new PileEmptyException();
 	}
@@ -85,6 +85,8 @@ public class Deck {
 			cards[value] = temp;
 		}
 	}
+	
+	//There needs to be a method that shuffles the cards in the discard pile (except the top one) when the draw pile is empty and then puts them in the draw pile and then only leaves the top one in the discard pile -- SB
 	
 	
 	
