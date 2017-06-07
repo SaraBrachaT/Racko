@@ -111,13 +111,15 @@ private void setUpPiles()
 	drawPile.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 	drawPile.setHorizontalTextPosition(JButton.CENTER);
 	drawPile.setVerticalTextPosition(JButton.CENTER);
-	drawPile.setLocation(575, 350);
-	drawPile.setSize(220,170);
+	drawPile.setLocation(625, 350);
+	drawPile.setSize(170, 115);
+	drawPile.setBorder(null);
 	mainFrame.add(drawPile);
 	
 	discardPile = new JButton(frontBkgrnd);
 	discardPile.setLocation(470, 350);
-	discardPile.setSize(220, 170);
+	discardPile.setSize(170, 115);
+	discardPile.setBorder(null);
 	discardPile.setVisible(false);
 	mainFrame.add(discardPile);
 	
@@ -125,21 +127,14 @@ private void setUpPiles()
 	
 	drawPile.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
-	    	if(!currentCard.isVisible())
-	    	{
-	    		try
-	    		{
-	    			setCurrentCardValue(racko.getDrawPile().pickDrawPile().toString());
+	    	pickCardFromDraw();
+	    	//check which button clicked on
+	    	JButton pressedButton = findPressedButton();
+	    	pressedButton.addActionListener(new ActionListener() {
+	    		public void actionPerformed(ActionEvent e) {
+	    			placeCard(pressedButton);
 	    		}
-	    		catch (PileEmptyException e1)
-	    		{
-	    			//show empty pile...shouldn't really happen cuz should keep reshuffling
-	    		}
-	    	}
-	    	if(!discardPile.isVisible())
-	    	{
-	    		discardPile.setVisible(true);
-	    	}
+	    });
 	    }
 	});
 	
@@ -148,13 +143,15 @@ private void setUpPiles()
 
 private void setUpCurrentCard()
 {
-	instruction = new JLabel("Fix Wording: Click a card on your board to place this card there. If you would not"
+	instruction = new JLabel("Fix Wording: Click a card on your board to place this card there. \nIf you would not"
 			+ " like to use this card, click the discard pile");
+	instruction.setLocation(550, 5);
+	instruction.setSize(800,200);
+	instruction.setVisible(false);
+	mainFrame.add(instruction);
 			
 	currentCard = new JLabel(frontBkgrnd);
 	currentCard.setSize(700,500);
-	System.out.println(screenSize.getWidth());
-	System.out.println(screenSize.width);
 	currentCard.setLocation(300, 10);
 	currentCard.setHorizontalTextPosition(JButton.CENTER);
 	currentCard.setVerticalTextPosition(JButton.CENTER);
@@ -178,6 +175,49 @@ private void setCurrentCardValue(String cardNum)
 	        System.err.println("Couldn't find file: " + path);
 	        return null;
 	    }
+	}
+
+	private JButton findPressedButton()
+	{
+		for(JButton card : user1Cards)
+		{
+			if(card.getModel().isPressed())
+			{
+				return card;
+			}
+		}
+		
+		if(discardPile.getModel().isPressed())
+		{
+			return discardPile;
+		}
+		return null;
+	}
+	
+	private void pickCardFromDraw()
+	{
+		if(!currentCard.isVisible())
+    	{
+    		try
+    		{
+    			setCurrentCardValue(racko.getDrawPile().pickDrawPile().toString());
+    		}
+    		catch (PileEmptyException e1)
+    		{
+    			//show empty pile...shouldn't really happen cuz should keep reshuffling
+    		}
+    		instruction.setVisible(true);
+    	}
+
+	}
+	
+	private void placeCard(JButton pressedCard)
+	{
+    	//do this when discard
+/*	    	if(!discardPile.isVisible())
+    	{
+    		discardPile.setVisible(true);
+    	}*/
 	}
 
 	/**
