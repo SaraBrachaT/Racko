@@ -31,7 +31,9 @@ public class GameBoard extends JFrame
 	private ImageIcon partialFrontBkgrnd;
 	private ImageIcon frontBkgrnd;
 	private ImageIcon backBkgrnd;
+	private ImageIcon discardBkgrnd;
 	private Dimension screenSize;
+	private ActionListener cardPlaced;
 	
 	
 	private Game racko;
@@ -61,8 +63,16 @@ public class GameBoard extends JFrame
 		partialFrontBkgrnd = createImageIcon("/partialCardFront.PNG");
 		frontBkgrnd = createImageIcon("/cardFront.png");
 		backBkgrnd = createImageIcon("/RackoCardBack.PNG");
+		discardBkgrnd = createImageIcon("/DiscardPile.PNG");
 		
 		
+		cardPlaced = new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				
+			}
+		}
 		
 		setUpBoards();
 		setUpPiles();
@@ -98,6 +108,7 @@ public class GameBoard extends JFrame
 		user1Cards[cardNum].setVerticalTextPosition(JButton.CENTER);
 		user1Cards[cardNum].setSize(170, 50);
 		user1Cards[cardNum].setLocation(40, 20 + (cardNum*50));
+		user1Cards[cardNum].addActionListener(cardPlaced);
 		mainFrame.add(user1Cards[cardNum]);
 
 		user1Cards[cardNum].setText(((Integer)racko.getDrawPile().pickDrawPile()).toString());
@@ -111,16 +122,15 @@ private void setUpPiles()
 	drawPile.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 	drawPile.setHorizontalTextPosition(JButton.CENTER);
 	drawPile.setVerticalTextPosition(JButton.CENTER);
-	drawPile.setLocation(625, 350);
+	drawPile.setLocation(640, 350);
 	drawPile.setSize(170, 115);
 	drawPile.setBorder(null);
 	mainFrame.add(drawPile);
 	
-	discardPile = new JButton(frontBkgrnd);
+	discardPile = new JButton(discardBkgrnd);
 	discardPile.setLocation(470, 350);
 	discardPile.setSize(170, 115);
 	discardPile.setBorder(null);
-	discardPile.setVisible(false);
 	mainFrame.add(discardPile);
 	
 	
@@ -214,10 +224,7 @@ private void setCurrentCardValue(String cardNum)
 	private void placeCard(JButton pressedCard)
 	{
     	//do this when discard
-/*	    	if(!discardPile.isVisible())
-    	{
-    		discardPile.setVisible(true);
-    	}*/
+	    System.out.println(pressedCard.getName());
 	}
 
 	/**
