@@ -4,6 +4,7 @@ public class Game {
 
 	
 	private Deck drawPile;
+	private Deck discardPile;
 	private Rack[] racks;
 	int currentCard;//for keeping track of the card picked this turn easily
 	//to keep track of who we're up to. there might be a much easier way
@@ -17,6 +18,7 @@ public class Game {
 	public Game(String player1, String player2)
 	{
 		drawPile = new Deck();
+		discardPile = new Deck();
 		
 		racks = new Rack[2];
 		racks[0] = new Rack(player1);
@@ -33,5 +35,10 @@ public class Game {
 	public Deck getDrawPile()
 	{
 		return drawPile;
+	}
+	
+	public Deck getDiscardPile()
+	{
+		return discardPile;
 	}
 }

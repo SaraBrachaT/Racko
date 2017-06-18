@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import logic.Game;
 import logic.PileEmptyException;
 
+//TODO: If pick from discard, instead of picking that, places already picked card where want to place card from discard player
 public class GameBoard extends JFrame
 {
 
@@ -34,6 +35,7 @@ public class GameBoard extends JFrame
 	private ImageIcon emptyDiscardBkgrnd;
 	private Dimension screenSize;
 	private PlaceListener cardPlaced;
+	private boolean ignoreClick;
 
 	private Game racko;
 
@@ -102,7 +104,7 @@ public class GameBoard extends JFrame
 		user1Cards[cardNum].addActionListener(cardPlaced);
 		mainFrame.add(user1Cards[cardNum]);
 
-		user1Cards[cardNum].setText(((Integer) racko.getDrawPile().pickDrawPile()).toString());
+		user1Cards[cardNum].setText(racko.getDrawPile().pickDrawPile());
 		// user1Cards[cardNum].setText(((Integer)tempGen.nextInt(60)).toString());
 	}
 
@@ -130,14 +132,13 @@ public class GameBoard extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				pickCardFromDraw();
-				// check which button clicked on
-				// Does this before press a card!
-				/*
-				 * JButton pressedButton = findPressedButton();
-				 * pressedButton.addActionListener(new ActionListener() { public
-				 * void actionPerformed(ActionEvent e) {
-				 * placeCard(pressedButton); } });
-				 */
+			}
+		});
+
+		discardPile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				pickCardFromDiscard();
 			}
 		});
 
@@ -202,6 +203,7 @@ public class GameBoard extends JFrame
 			try
 			{
 				setCurrentCardValue(racko.getDrawPile().pickDrawPile().toString());
+				ignoreClick = false;
 			}
 			catch (PileEmptyException e1)
 			{
@@ -213,15 +215,39 @@ public class GameBoard extends JFrame
 
 	}
 
+	private void pickCardFromDiscard()
+	{
+		System.out.println("In pick discard");
+		if (!currentCard.isVisible())
+		{
+			try
+			{
+				System.out.println("Current card is not visible");
+				setCurrentCardValue(racko.getDiscardPile().pickDiscardPile().toString());
+				System.out.println(currentCard.getText());
+				ignoreClick = false;
+			}
+			catch (PileEmptyException e)
+			{
+				// TODO get rid of this exception
+			}
+			instruction.setVisible(true);
+		}
+	}
+
 	private void placeCard(JButton pressedCard)
 	{
-		System.out.println(pressedCard.getText());
-
 		String pressedText = pressedCard.getText();
 		pressedCard.setText(currentCard.getText());
 		discardPile.setText(pressedText);
 		discardPile.setIcon(frontBkgrnd);
 		currentCard.setVisible(false);
+		racko.getDiscardPile().addToDiscardPile(pressedText);
+		// TODO: Now if click another card, this value goes there also
+		// Need to somehow reset currentCard to null, but I don't want to keep
+		// reinstantiating it...
+		// And turn action listener off...
+		setUpCurrentCard();
 	}
 
 	/**
@@ -246,9 +272,15 @@ public class GameBoard extends JFrame
 
 		public void actionPerformed(ActionEvent arg0)
 		{
-			System.out.println("In action listener");
-			System.out.println(theCard.getText());
-			placeCard(theCard);
+			if (ignoreClick)
+			{
+				return;
+			}
+			else
+			{
+				placeCard(theCard);
+				ignoreClick = true;
+			}
 		}
 	}
 }

@@ -6,25 +6,25 @@ import java.util.Stack;
 
 public class Deck {
 
-	private int[] cards;
-	private Stack<Integer> drawPile;
-	private Stack<Integer> discardPile;
+	private String[] cards;
+	private Stack<String> drawPile;
+	private Stack<String> discardPile;
 	private final int numCards = 60;
 	
 	public Deck(){
 	
-		this.cards = new int[numCards];
+		this.cards = new String [numCards];
 		instanstiateCards();
-		this.drawPile = new Stack<Integer>();
+		this.drawPile = new Stack<String>();
 		fillDeck();
-		this.discardPile = new Stack<Integer>();
+		this.discardPile = new Stack<String>();
 	}
 	
 	/*
 	 * take top card from the drawing pile
 	 */
 	
-	public Integer pickDrawPile() throws PileEmptyException  //shouldn't really happen cuz should keep reshuffling.... Also, he doesn't like code that's on one line without{} like this, so we should probably change that --SB
+	public String pickDrawPile() throws PileEmptyException  //shouldn't really happen cuz should keep reshuffling.... Also, he doesn't like code that's on one line without{} like this, so we should probably change that --SB
 	{
 		if(!drawPile.isEmpty()) return drawPile.pop();   //it would be easier for me if it's returned as a string
 		
@@ -34,7 +34,7 @@ public class Deck {
 	/*
 	 * peek top card from the discard pile
 	 */
-	public Integer getTopDiscard() throws PileEmptyException
+	public String getTopDiscard() throws PileEmptyException
 	{
 		if(!discardPile.isEmpty()) return discardPile.peek();
 		else throw new PileEmptyException();
@@ -42,7 +42,7 @@ public class Deck {
 	/*
 	 * take top card from the discard pile
 	 */
-	public Integer pickDiscardPile() throws PileEmptyException
+	public String pickDiscardPile() throws PileEmptyException
 	{
 		if(!discardPile.isEmpty()) return discardPile.pop();
 		else throw new PileEmptyException();
@@ -50,14 +50,14 @@ public class Deck {
 	/*
 	 * add a card to the discard pile 
 	 */
-	public void addToDiscardPile(int num) 
+	public void addToDiscardPile(String num) 
 	{
 		this.discardPile.push(num);
 	}
 
 	private void instanstiateCards(){
 		for(int i = 0; i < numCards; i++){
-			cards[i] = i+1;
+			cards[i] = String.valueOf(i+1);
 		}
 	}
 	
@@ -80,9 +80,9 @@ public class Deck {
 		for(int i = 0; i < numCards; i++)
 		{
 			value = rand.nextInt(60);
-			temp = cards[i];
+			temp = Integer.valueOf(cards[i]);
 			cards[i] = cards[value];
-			cards[value] = temp;
+			cards[value] = String.valueOf(temp);
 		}
 	}
 	
