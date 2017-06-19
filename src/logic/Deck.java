@@ -60,7 +60,10 @@ public class Deck {
 			cards[i] = String.valueOf(i+1);
 		}
 	}
-	
+	public boolean isDiscardPileEmpty(){
+		if(discardPile.isEmpty())return true;
+		else return false;
+	}
 	private void fillDeck(){
 		
 		shuffleCards();

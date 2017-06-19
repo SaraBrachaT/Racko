@@ -41,8 +41,9 @@ public class GameBoard extends JFrame
 
 	public GameBoard() throws PileEmptyException
 	{
-		racko = new Game("Computer", "User");
-
+		//racko = new Game("Computer", "User");
+		//no args constructor,which instantiates player in the game class
+		racko = new Game();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(0, 0, screenSize.width, screenSize.height);
