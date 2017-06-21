@@ -140,9 +140,14 @@ public class GameBoard extends JFrame
 		discardPile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				if(currentCard.isVisible())
+				{
+					placeCard(discardPile);
+				}
 				pickCardFromDiscard();
 			}
 		});
+		
 
 	}
 
