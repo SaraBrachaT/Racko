@@ -142,9 +142,14 @@ public class GameBoard extends JFrame
 			{
 				if(currentCard.isVisible())
 				{
-					placeCard(discardPile);
+					discardPickedCard();
 				}
-				pickCardFromDiscard();
+				else
+				{
+					pickCardFromDiscard();	
+					System.out.println("In else");
+				}
+				
 			}
 		});
 		
@@ -256,7 +261,15 @@ public class GameBoard extends JFrame
 		// And turn action listener off...
 		setUpCurrentCard();
 	}
-
+	
+	private void discardPickedCard()
+	{
+		discardPile.setText(currentCard.getText());
+		discardPile.setIcon(frontBkgrnd);
+		currentCard.setVisible(false);
+		racko.getDiscardPile().addToDiscardPile(currentCard.getText());
+		setUpCurrentCard();
+	}
 	/**
 	 * Launch the application.
 	 * 
